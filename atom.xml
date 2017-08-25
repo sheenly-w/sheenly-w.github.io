@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>晓不得</title>
-  <subtitle>床前明月光</subtitle>
+  <title>晓不得&#39;s Blog</title>
+  
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-05T02:19:46.000Z</updated>
+  <updated>2017-08-25T07:01:43.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,18 +16,20 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/08/25/hello-world/"/>
-    <id>http://yoursite.com/2017/08/25/hello-world/</id>
-    <published>2017-08-25T02:15:12.130Z</published>
-    <updated>2016-09-05T02:19:46.000Z</updated>
+    <title>ArcGis批量裁剪影像</title>
+    <link href="http://yoursite.com/2017/08/25/ArcGis%E6%89%B9%E9%87%8F%E8%A3%81%E5%89%AA%E5%BD%B1%E5%83%8F/"/>
+    <id>http://yoursite.com/2017/08/25/ArcGis批量裁剪影像/</id>
+    <published>2017-08-25T02:39:06.000Z</published>
+    <updated>2017-08-25T07:01:43.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;&amp;emsp;&amp;emsp;ArcGis中的裁剪工具虽然也有批量裁剪的选项，但是还是得一个个地单独设置参数，感觉很麻烦，所以自己写了一个批量裁剪的脚本。&lt;br&gt;
     
     </summary>
     
+    
+      <category term="GIS" scheme="http://yoursite.com/tags/GIS/"/>
     
   </entry>
   
