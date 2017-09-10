@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="GIS,arcpy," />
+  <meta name="keywords" content="gdal,python," />
 
 
 
@@ -86,19 +86,16 @@
 
 
 
-<meta name="description" content="&amp;emsp;&amp;emsp;ArcGis中的裁剪工具虽然也有批量裁剪的选项，但是还是得一个个地单独设置参数，感觉很麻烦，所以自己写了一个批量裁剪的脚本。">
+<meta name="description" content="&amp;emsp;&amp;emsp;最近需要把同一个地方的多景影像做一下纠偏和重投影，所以写了两个函数方便批量处理。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ArcGis批量裁剪影像">
-<meta property="og:url" content="http://nodawn.github.io/2017/08/25/ArcGis批量裁剪影像/index.html">
+<meta property="og:title" content="使用gdal做影像纠偏及重投影">
+<meta property="og:url" content="http://nodawn.github.io/2017/09/10/使用gdal做影像纠偏及重投影/index.html">
 <meta property="og:site_name" content="晓不得's Blog">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;ArcGis中的裁剪工具虽然也有批量裁剪的选项，但是还是得一个个地单独设置参数，感觉很麻烦，所以自己写了一个批量裁剪的脚本。">
-<meta property="og:image" content="http://nodawn.github.io/image1.png">
-<meta property="og:image" content="http://nodawn.github.io/image2.png">
-<meta property="og:updated_time" content="2017-09-10T09:16:32.000Z">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;最近需要把同一个地方的多景影像做一下纠偏和重投影，所以写了两个函数方便批量处理。">
+<meta property="og:updated_time" content="2017-09-10T10:05:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ArcGis批量裁剪影像">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;ArcGis中的裁剪工具虽然也有批量裁剪的选项，但是还是得一个个地单独设置参数，感觉很麻烦，所以自己写了一个批量裁剪的脚本。">
-<meta name="twitter:image" content="http://nodawn.github.io/image1.png">
+<meta name="twitter:title" content="使用gdal做影像纠偏及重投影">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;最近需要把同一个地方的多景影像做一下纠偏和重投影，所以写了两个函数方便批量处理。">
 
 
 
@@ -119,9 +116,9 @@
 
 
 
-  <link rel="canonical" href="http://nodawn.github.io/2017/08/25/ArcGis批量裁剪影像/"/>
+  <link rel="canonical" href="http://nodawn.github.io/2017/09/10/使用gdal做影像纠偏及重投影/"/>
 
-  <title> ArcGis批量裁剪影像 | 晓不得's Blog </title>
+  <title> 使用gdal做影像纠偏及重投影 | 晓不得's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -241,7 +238,7 @@
             
             
               
-                ArcGis批量裁剪影像
+                使用gdal做影像纠偏及重投影
               
             
           </h1>
@@ -253,8 +250,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-08-25T10:39:06+08:00" content="2017-08-25">
-              2017-08-25
+            <time itemprop="dateCreated" datetime="2017-09-10T17:13:00+08:00" content="2017-09-10">
+              2017-09-10
             </time>
           </span>
 
@@ -281,12 +278,9 @@
       
 
       
-        <p>&emsp;&emsp;ArcGis中的裁剪工具虽然也有批量裁剪的选项，但是还是得一个个地单独设置参数，感觉很麻烦，所以自己写了一个批量裁剪的脚本。<br><a id="more"></a><br>功能就是读取某一文件夹下的所有tif文件，然后循环调用裁剪函数。因为是用的arcpy中的函数，所以电脑上肯定要有ArcGis。</p>
-<p>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#coding:utf-8</div><div class="line">import os</div><div class="line">import glob</div><div class="line">import arcpy</div><div class="line"></div><div class="line">indir = r&quot;F:\test\input&quot;        #输入目录</div><div class="line">outdir = r&quot;F:\test\output&quot;      #输出目录</div><div class="line">shp = r&quot;F:\test\input\ms.shp&quot;     #裁剪用的shp文件</div><div class="line"></div><div class="line">rasters = glob.glob(os.path.join(indir,&quot;*.tif&quot;))         #寻找路径下所有的tif文件</div><div class="line"></div><div class="line">#逐个裁剪</div><div class="line">for raster in rasters:</div><div class="line">    outname = os.path.join(outdir,os.path.basename(shp).split(&quot;.&quot;)[0]+&quot;_&quot;+os.path.basename(raster).split(&quot;.&quot;)[0]+&quot;.tif&quot;)    #输出的文件名，可以根据自己的需要来修改</div><div class="line"></div><div class="line">    arcpy.Clip_management(raster,&quot;#&quot;,outname,shp,&quot;1&quot;,&quot;ClippingGeometry&quot;)</div><div class="line">    print outname+&quot; done&quot; </div><div class="line"></div><div class="line"></div><div class="line">print &quot;All done&quot;</div></pre></td></tr></table></figure></p>
-<p>也可以自定义工具箱，添加脚本，方便以后使用:<br><img src="image1.png" alt=""></p>
-<p>不过要把这三行改一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">indir = r&quot;F:\test\input&quot;        #输入目录</div><div class="line">outdir = r&quot;F:\test\output&quot;      #输出目录</div><div class="line">shp = r&quot;F:\test\input\ms.shp&quot;     #裁剪用的shp文件</div></pre></td></tr></table></figure></p>
-<p>改成这样来接受输入的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">indir = arcpy.GetParameterAsText(0)       #输入目录</div><div class="line">outdir = arcpy.GetParameterAsText(1)      #输出目录</div><div class="line">shp = arcpy.GetParameterAsText(2)     #裁剪用的shp文件</div></pre></td></tr></table></figure></p>
-<p>最后出来就是这个样子：<br><img src="image2.png" alt=""></p>
+        <p>&emsp;&emsp;最近需要把同一个地方的多景影像做一下纠偏和重投影，所以写了两个函数方便批量处理。<br><a id="more"></a><br>&emsp;&emsp;既然要纠偏，那肯定需要一套控制点，可以是实测的坐标，也可以在谷歌地球选取控制点。还需要选一景影像，用Arcgis的GeoReferencing工具选择对应点。然后保存控制点，这样就有了一套和实际坐标对应的待校正的坐标点。接下来就可以用这套控制点来批量给多景影像做纠偏了。<br>下面是具体实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">def registration(src,dst_name):</div><div class="line">    #参数解释：src为已经打开的影像，Dataset类型；dst_name是输出影像名，字符串</div><div class="line">    from osgeo import gdal,osr</div><div class="line"></div><div class="line">    #获取坐标转换信息</div><div class="line">    geo = src.GetGeoTransform()</div><div class="line">    ulx = geo[0]</div><div class="line">    uly = geo[3]</div><div class="line">    width = geo[1]</div><div class="line">    height = geo[5]   #负数</div><div class="line"></div><div class="line">    #控制点，每一个控制点前两个数是实际坐标，后两个数是影像上对应的坐标</div><div class="line">    control_points = (</div><div class="line">        (328934.948355,5251785.227941,328227.001453,5251516.732312),</div><div class="line">        (339528.016359,5250465.211586,338819.351804,5250186.404651),</div><div class="line">        (338205.754806,5243288.223271,337634.016100,5243014.700307),</div><div class="line">        (325890.902633,5237908.114733,325312.644780,5237681.146840),</div><div class="line">        (334505.198997,5235187.907452,333817.472553,5234896.533979),</div><div class="line">        (342759.999727,5235040.480513,342058.413202,5234801.918790),</div><div class="line">        (328305.415996,5222908.584676,327610.186662,5222609.795760),</div><div class="line">        (351577.331402,5228533.579590,350957.066689,5228276.970428)</div><div class="line">    )</div><div class="line">    GCPs = [gdal.GCP(point[0],point[1],0.0,(point[2]-ulx)/width,(point[3]-uly)/height) for point in control_points]</div><div class="line"></div><div class="line">    #给影像加入控制点</div><div class="line">    src.SetGCPs(GCPs,src.GetProjection())</div><div class="line"></div><div class="line">    #使用gdalwarp校正并输出</div><div class="line">    gdal.WarpOptions(</div><div class="line">        format = &apos;GTiff&apos;,</div><div class="line">        outputType = gdal.GDT_Float32,</div><div class="line">        resampleAlg = gdal.GRA_NearestNeighbour,</div><div class="line">        polynomialOrder = 1</div><div class="line">    )</div><div class="line">    gdal.Warp(dst_name,src)</div><div class="line">    src = None</div><div class="line">    return True</div></pre></td></tr></table></figure></p>
+<p>关于GetGeoTransform的笔记：<br>这个函数可以获得影像坐标转换的六个参数，依次为：<br>左上角横坐标，宽度(以像素为单位)，行旋转，左上角纵坐标，列旋转，高度(负数)<br><a href="http://www.perrygeo.com/python-affine-transforms.html" target="_blank" rel="external">这里有详细解释</a></p>
+<p>接下来是给影像重投影<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">def reproject(src,dst_name):</div><div class="line">    from osgeo import gdal,osr</div><div class="line"></div><div class="line">    #原空间参照系统</div><div class="line">    s_srs = osr.SpatialReference()</div><div class="line">    s_srs.ImportFromEPSG(32653)</div><div class="line">    #目标空间参照系统</div><div class="line">    d_srs = osr.SpatialReference()</div><div class="line">    d_srs.ImportFromEPSG(3857)</div><div class="line">    #坐标转换</div><div class="line">    ts = osr.CoordinateTransformation(s_srs,d_srs)</div><div class="line"></div><div class="line">    # 获取坐标和投影信息</div><div class="line">    geo = src.GetGeoTransform()</div><div class="line">    pro = src.GetProjection()</div><div class="line">    xsize = src.RasterXSize</div><div class="line">    ysize = src.RasterYSize</div><div class="line"></div><div class="line">    # 计算目标影像的左上角和右下角坐标</div><div class="line">    (ulx,uly,ulz) = ts.TransformPoint(geo[0],geo[3])</div><div class="line">    (brx,bry,brz) = ts.TransformPoint(geo[0]+xsize*geo[1],geo[3]+ysize*geo[5])</div><div class="line"></div><div class="line">    # 计算目标影像的长宽，以像素为单位</div><div class="line">    new_xsize = int((brx-ulx)/30.0)</div><div class="line">    new_ysize = int((uly-bry)/30.0)</div><div class="line"></div><div class="line">    # 创建目标影像</div><div class="line">    driver = gdal.GetDriverByName(&apos;GTiff&apos;)</div><div class="line">    dst = driver.Create(dst_name,new_xsize,new_ysize,1,gdal.GDT_Float32)</div><div class="line"></div><div class="line">    new_geo = (ulx,30.0,geo[2],uly,geo[4],-30.0)</div><div class="line">    dst.SetGeoTransform(new_geo)</div><div class="line">    dst.SetProjection(d_srs.ExportToWkt())</div><div class="line"></div><div class="line">    #使用gdalwarp重投影</div><div class="line">    gdal.WarpOptions(</div><div class="line">        format = &apos;GTiff&apos;,</div><div class="line">        outputType = gdal.GDT_Float32,</div><div class="line">        srcSRS = s_srs,</div><div class="line">        dstSRS = d_srs,</div><div class="line">        resampleAlg = gdal.GRA_NearestNeighbour</div><div class="line">    )</div><div class="line">    gdal.Warp(dst,src)</div><div class="line"></div><div class="line">    dst = None</div><div class="line">    src = None</div><div class="line">    return True</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -309,9 +303,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/GIS/" rel="tag">#GIS</a>
-          
-            <a href="/tags/arcpy/" rel="tag">#arcpy</a>
+            <a href="/tags/gdal-python/" rel="tag">#gdal,python</a>
           
         </div>
       
@@ -320,17 +312,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/05/My-first-blog/" rel="next" title="My first blog">
-                <i class="fa fa-chevron-left"></i> My first blog
+              <a href="/2017/08/25/ArcGis批量裁剪影像/" rel="next" title="ArcGis批量裁剪影像">
+                <i class="fa fa-chevron-left"></i> ArcGis批量裁剪影像
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/10/使用gdal做影像纠偏及重投影/" rel="prev" title="使用gdal做影像纠偏及重投影">
-                使用gdal做影像纠偏及重投影 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
