@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
-Allow: /archives/
-Allow: /tags/ 
+Disallow: /archives/
+Disallow: /tags/ 
 Disallow: /js/
 Disallow: /css/
 Disallow: /fonts/
