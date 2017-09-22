@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://nodawn.github.io/"/>
-  <updated>2017-09-12T01:29:07.000Z</updated>
+  <updated>2017-09-10T09:16:32.000Z</updated>
   <id>http://nodawn.github.io/</id>
   
   <author>
@@ -14,26 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>使用gdal做影像纠偏及重投影</title>
-    <link href="http://nodawn.github.io/%E4%BD%BF%E7%94%A8gdal%E5%81%9A%E5%BD%B1%E5%83%8F%E7%BA%A0%E5%81%8F%E5%8F%8A%E9%87%8D%E6%8A%95%E5%BD%B1.html"/>
-    <id>http://nodawn.github.io/使用gdal做影像纠偏及重投影.html</id>
-    <published>2017-09-10T09:13:00.000Z</published>
-    <updated>2017-09-12T01:29:07.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&amp;emsp;&amp;emsp;最近需要把同一个地方的多景影像做一下纠偏和重投影，所以写了两个函数方便批量处理。&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="gdal" scheme="http://nodawn.github.io/tags/gdal/"/>
-    
-      <category term="python" scheme="http://nodawn.github.io/tags/python/"/>
-    
-  </entry>
   
   <entry>
     <title>ArcGis批量裁剪影像</title>
