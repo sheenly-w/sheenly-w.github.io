@@ -89,7 +89,7 @@
 <meta name="description" content="大家好，这是我的第一篇博文。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="My first blog">
-<meta property="og:url" content="http://nodawn.github.io/My-first-blog.html">
+<meta property="og:url" content="http://nodawn.github.io/2016/09/05/My-first-blog">
 <meta property="og:site_name" content="晓不得's Blog">
 <meta property="og:description" content="大家好，这是我的第一篇博文。">
 <meta property="og:updated_time" content="2016-09-05T03:40:13.000Z">
@@ -116,7 +116,7 @@
 
 
 
-  <link rel="canonical" href="http://nodawn.github.io/My-first-blog.html"/>
+  <link rel="canonical" href="http://nodawn.github.io/2016/09/05/My-first-blog"/>
 
   <title> My first blog | 晓不得's Blog </title>
 </head>
@@ -308,7 +308,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/ArcGis批量裁剪影像.html" rel="prev" title="ArcGis批量裁剪影像">
+              <a href="/2017/08/25/ArcGis批量裁剪影像" rel="prev" title="ArcGis批量裁剪影像">
                 ArcGis批量裁剪影像 <i class="fa fa-chevron-right"></i>
               </a>
             
